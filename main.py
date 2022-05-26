@@ -131,7 +131,7 @@ class Downloader:
         """
         try:
             path = path = self.new_video_folder(currentTime)
-            title = yt.title.replace('.', '')
+            title = yt.title.replace('.', '').replace(',', '')
             video = VideoFileClip(os.path.join(path, title + ".mp4"))
             video.audio.write_audiofile(os.path.join(path, title + ".mp3"))
         except Exception as e:
