@@ -5,6 +5,9 @@ try:
     import os
     from moviepy.video.io.VideoFileClip import VideoFileClip
     import sys
+    import time
+    from pypresence import Presence
+    import json
     import re
     import urllib.request
     import time
@@ -17,15 +20,53 @@ except ImportError:
     - pip install moviepy
     - pip install sys
     - pip install regex
+    - pip install pypresence
     - pip install urllib3
     """)
     input('Press enter to close this window.')
     sys.exit(1)
 
 class Downloader:
-    def __init__(self, link):
+    def __init__(self):
+        self.link = ''
+
+    # ========================= >
+    # Sets the link and runs main
+    # < =========================
+    def set_program(self, link):
         self.link = link
-        self.main() # run the program
+        self.main()
+
+
+    # ========================= >
+    # Returns the link for the Discord presence
+    # < =========================
+    def get_link(self):
+        return self.link
+
+
+    # ========================= >
+    # Sets the Discord presence
+    # < =========================
+    def set_presence(self, presence):
+        game = ""
+        try:
+            with open('config.json') as json_file:
+                data = json.load(json_file)
+                if data.get('game'):
+                    game = data.get('game')
+
+        except Exception as e:
+            game = ""
+            pass
+
+        RPC.update(
+            large_image = "original",
+            large_text = "This is a cat",
+            details = presence,
+            state = game,
+            start = start,
+        )
 
 
     # ========================= >
@@ -226,15 +267,39 @@ class Downloader:
         print("Download completed!")
         print('\n')
 
-
 if __name__ == "__main__":
     print('Started')
 
+    dwnl = Downloader()
+    
+    start = int(time.time())
+    client_id = "979507386832273449"
+    RPC = Presence(client_id)
+    RPC.connect()
+
+    view_presence = True
+
+    try:
+        with open('config.json') as json_file:
+            data = json.load(json_file)
+            if data.get('presence'):
+                view_presence = True
+
+    except Exception as e:
+        view_presence = False
+        pass
+
     # Run the main function
     while 1:
+        if view_presence:
+            dwnl.set_presence('Stand by...')
+
         #ask for the link from user
         link = input("Enter the link of YouTube video you want to download (\"cancel\" to cancel): ")
         if link == "none" or link == "exit" or link == "cancel":
             sys.exit(1)
 
-        Downloader(link)
+        if view_presence:
+            dwnl.set_presence(f"Downloading {link}...")
+        
+        dwnl.set_program(link)
