@@ -51,7 +51,7 @@ class Downloader:
     def set_presence(self, presence):
         game = ""
         try:
-            with open('config.json') as json_file:
+            with open('downloads/config.json') as json_file:
                 data = json.load(json_file)
                 if data.get('game'):
                     game = data.get('game')
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     view_presence = True
 
     try:
-        with open('config.json') as json_file:
+        with open('downloads/config.json') as json_file:
             data = json.load(json_file)
             if data.get('presence'):
                 view_presence = True
