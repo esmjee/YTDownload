@@ -1,0 +1,5 @@
+downloads/
+build/
+__pycache__/
+dist/
+main.spec
