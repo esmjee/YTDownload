@@ -7,6 +7,7 @@ try:
     import sys
     import time
     from pypresence import Presence
+    import random
     import json
     import re
     import urllib.request
@@ -50,15 +51,11 @@ class Downloader:
     # < =========================
     def set_presence(self, presence):
         game = ""
-        try:
-            with open('downloads/config.json') as json_file:
-                data = json.load(json_file)
-                if data.get('game'):
-                    game = data.get('game')
-
-        except Exception as e:
-            game = ""
-            pass
+        
+        data = read_json_file()
+        if data and data.get('game'):
+            games = data.get('game')
+            game = random.choice(games) if type(games) == list else games
 
         RPC.update(
             large_image = "original",
@@ -270,6 +267,18 @@ class Downloader:
         print("Download completed!")
         print('\n')
 
+def read_json_file():
+    """
+    This function reads the json file and returns the data
+    """
+    try:
+        f = open('downloads/config.json', 'r')
+        data = json.load(f)
+        return data
+    except Exception as e:
+        print('Error: No config.json file found')
+        return None
+
 if __name__ == "__main__":
     print('Started')
 
@@ -282,15 +291,8 @@ if __name__ == "__main__":
 
     view_presence = True
 
-    try:
-        with open('downloads/config.json') as json_file:
-            data = json.load(json_file)
-            if data.get('presence'):
-                view_presence = True
-
-    except Exception as e:
-        view_presence = False
-        pass
+    data = read_json_file()
+    view_presence = True if data != None and data.get('presence') else False
 
     # Run the main function
     while 1:
