@@ -131,7 +131,9 @@ class Downloader:
         """
         try:
             path = path = self.new_video_folder(currentTime)
-            title = yt.title.replace('.', '').replace(',', '')
+            title = yt.title.replace('.', '').replace(',', '').replace('*', '') \
+                .replace('/', '').replace('\\', '').replace(':', '').replace('?', '') \
+                .replace('<', '').replace('>', '').replace('|', '').replace(':', '')
             video = VideoFileClip(os.path.join(path, title + ".mp4"))
             video.audio.write_audiofile(os.path.join(path, title + ".mp3"))
         except Exception as e:
@@ -183,6 +185,7 @@ class Downloader:
                     minutes = yt.length / 60
                     print(f'---------------------- =({i + 1})= ----------------------')
                     print(f"Title: {yt.title}")
+                    print(f"Number of views: {yt.views}")
                     print(f'Url: https://www.youtube.com/watch?v={result}')
                     print(f"Length of video: {round(minutes, 2)} minutes ({yt.length} seconds)")
                     print('---------------------------------------------------\n')
