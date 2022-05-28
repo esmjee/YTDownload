@@ -12,7 +12,7 @@ try:
     import re
     import urllib.request
     import time
-except ImportError:
+except (ImportError or ModuleNotFoundError) as importError:
     print("""
     You need to install all the modules
     - pip install pytube
@@ -209,7 +209,7 @@ class Downloader:
         # Ask user to choose a video
         while 1:
             choice = input('Enter the number of the video you want to download ("cancel" to cancel): ')
-            if choice == "none" or choice == "exit" or choice == "cancel":
+            if choice == "none" or choice == "exit" or choice == "cancel" or choice == "q" or choice == "quit" or choice == "close":
                 return None
 
             try:
@@ -276,23 +276,27 @@ def read_json_file():
         data = json.load(f)
         return data
     except Exception as e:
-        print('Error: No config.json file found')
+        print('Error: No downloads/config.json file found')
         return None
 
 if __name__ == "__main__":
     print('Started')
 
     dwnl = Downloader()
-    
-    start = int(time.time())
-    client_id = "979507386832273449"
-    RPC = Presence(client_id)
-    RPC.connect()
 
-    view_presence = True
+    view_presence = False
 
     data = read_json_file()
     view_presence = True if data != None and data.get('presence') else False
+
+    if view_presence:
+        try:
+            start = int(time.time())
+            client_id = "979507386832273449"
+            RPC = Presence(client_id)
+            RPC.connect()
+        except Exception as e:
+            print('Error: Could not connect to discord, please make sure you have discord running.')
 
     # Run the main function
     while 1:
@@ -300,7 +304,7 @@ if __name__ == "__main__":
             dwnl.set_presence('Stand by...')
 
         #ask for the link from user
-        link = input("Enter the link of YouTube video you want to download (\"cancel\" to cancel): ")
+        link = input("Enter the link of YouTube video you want to download (\"cancel\" to quit): ")
         if link == "none" or link == "exit" or link == "cancel":
             sys.exit(1)
 
