@@ -1,6 +1,6 @@
 # YouTube downloader
 
-Download YouTube videos quickly and without any hussle
+Download YouTube videos quickly and without any hustle
 
 Downloading videos from YouTubes website is against their Terms Of Service, use this program on your own risk.
 
