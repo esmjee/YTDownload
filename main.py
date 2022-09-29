@@ -292,7 +292,7 @@ def read_json_file():
 def log(message):
     print(f"[YTDownloader] {message}")
 
-if __name__ == "__main__":
+def main():
     log(f"""
     
     _____.___._______  ____ ________                      .__                    .___            
@@ -344,3 +344,6 @@ if __name__ == "__main__":
         except Exception as regex:
             log('There seems to be an invalid character! A link may contain these characters:')
             log(VALID_CHARS)
+    
+if __name__ == "__main__":
+    main()
